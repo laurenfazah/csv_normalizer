@@ -56,12 +56,16 @@ RSpec.describe Normalizer do
       expect(normalizer.convert_time_iso(unformatted_time)).to eq(iso_formatted_time)
     end
 
-    skip "converts timestamps column to US/Eastern" do
+    skip "converts timestamps column from Pacific to US/Eastern" do
 
     end
 
-    skip "ensures zip codes are 5 digits long" do
+    it "ensures zip codes are 5 digits long" do
+      valid_zip = "31403"
+      invalid_zip = "1111"
 
+      expect(normalizer.validate_zip(valid_zip)).to eq(valid_zip)
+      expect(normalizer.validate_zip(invalid_zip)).to eq("01111")
     end
 
     skip "converts all names to capitalized text" do

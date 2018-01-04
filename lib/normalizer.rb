@@ -31,6 +31,14 @@ class Normalizer
     DateTime.parse(time).iso8601
   end
 
+  def validate_zip(zip)
+    zip = zip.split('')
+    until zip.length == 5
+      zip.unshift("0")
+    end
+    zip.join
+  end
+
   private
 
   def file_name
