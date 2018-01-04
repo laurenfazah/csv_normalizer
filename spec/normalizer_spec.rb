@@ -56,8 +56,11 @@ RSpec.describe Normalizer do
       expect(normalizer.convert_time_iso(unformatted_time)).to eq(iso_formatted_time)
     end
 
-    skip "converts timestamps column from Pacific to US/Eastern" do
+    it "converts timestamps column from Pacific to US/Eastern" do
+      pacific = "2004-01-11T23:00:00+00:00"
+      eastern = "2004-01-12T01:00:00+00:00"
 
+      expect(normalizer.convert_pacific_to_eastern(pacific)).to eq(eastern)
     end
 
     it "ensures zip codes are 5 digits long" do

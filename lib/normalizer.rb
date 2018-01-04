@@ -31,6 +31,10 @@ class Normalizer
     DateTime.parse(time).iso8601
   end
 
+  def convert_pacific_to_eastern(time)
+    (DateTime.parse(time) + (2.0/24)).iso8601
+  end
+
   def validate_zip(zip)
     zip = zip.split('')
     until zip.length == 5
