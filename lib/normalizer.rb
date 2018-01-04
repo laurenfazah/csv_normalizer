@@ -39,6 +39,10 @@ class Normalizer
     zip.join
   end
 
+  def capitalize_name(name)
+    name.upcase
+  end
+
   private
 
   def file_name

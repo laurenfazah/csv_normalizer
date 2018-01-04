@@ -68,8 +68,12 @@ RSpec.describe Normalizer do
       expect(normalizer.validate_zip(invalid_zip)).to eq("01111")
     end
 
-    skip "converts all names to capitalized text" do
+    it "converts all names to capitalized text" do
+      names = %w(dwight Jim pAm anGelA)
 
+      names.each do |name|
+        expect(normalizer.capitalize_name(name)).to eq(name.upcase)
+      end
     end
 
     skip "unicode validates addresses" do
