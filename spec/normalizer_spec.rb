@@ -79,14 +79,6 @@ RSpec.describe Normalizer do
       end
     end
 
-    skip "unicode validates addresses" do
-
-    end
-
-    skip "converts times in FooDuration and BarDuration to floating points seconds format" do
-
-    end
-
     it "recalculates the TotalDuration column values" do
       foo_duration = "1:29:32.123"
       bar_duration = "1:32:33.123"
@@ -95,14 +87,6 @@ RSpec.describe Normalizer do
       rounded_total = normalizer.total_duration(foo_duration, bar_duration)
 
       expect(rounded_total).to eq(total)
-    end
-
-    skip "replaces invalid UTF-8 characters with a Unicode Replacement Character" do
-
-    end
-
-    skip "ensures the entire CSV is in the UTF-8 character set" do
-
     end
   end
 end
