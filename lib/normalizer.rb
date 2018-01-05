@@ -9,18 +9,33 @@ class Normalizer
     @data = []
   end
 
+  def run
+    read_csv
+    normalize_data
+    write_csv
+  end
+
   def read_csv
     CSV.foreach(csv_path, headers: true, header_converters: :symbol).with_index do |row, index|
-      data << row.to_h
+      @data << row.to_h
+    end
+  end
+
+  def normalize_data
+    @data.each do |row|
+      row[:zip]           = validate_zip(row[:zip])
+      row[:timestamp]     = convert_pacific_to_eastern(row[:timestamp])
+      row[:fullname]      = capitalize_name(row[:fullname])
+      row[:totalduration] = total_duration(row[:fooduration], row[:barduration])
     end
   end
 
   def write_csv
     CSV.open("./output/#{file_name}", "wb") do |csv|
-      csv << data.first.keys
+      csv << @data.first.keys
     end
 
-    data.each do |row|
+    @data.each do |row|
       CSV.open("./output/#{file_name}", "a+") do |csv|
         csv << row.values
       end
@@ -32,7 +47,10 @@ class Normalizer
   end
 
   def convert_pacific_to_eastern(time)
-    (DateTime.parse(time) + (2.0/24)).iso8601
+    begin
+       (DateTime.parse(time) + (2.0/24)).iso8601
+    rescue ArgumentError
+    end
   end
 
   def validate_zip(zip)

@@ -89,4 +89,47 @@ RSpec.describe Normalizer do
       expect(rounded_total).to eq(total)
     end
   end
+
+  context "integration" do
+    it "runs all validations when initialized with csv path" do
+      expect(Dir.empty?('./output')).to be_truthy
+
+      normalizer.run
+
+      expect(Dir.empty?('./output')).to be_falsey
+
+      read_csv = csv_read("./output/sample.csv")
+      csv_headers = read_csv[0]
+      csv_first_row = read_csv[1]
+      csv_last_row = read_csv.last
+
+      expect(csv_headers).to eq(expected_csv_data[:headers])
+
+      # iso8601 and US/Eastern
+      expect(csv_first_row[0]).to eq("2004-01-11T13:00:00+00:00")
+      expect(csv_last_row[0]).to eq("2010-02-04T10:44:11+00:00")
+
+      # 5 digit zip
+      expect(csv_first_row[2]).to eq("94121")
+      expect(csv_last_row[2]).to eq("00011")
+
+      # name capitalized
+      expect(csv_first_row[3]).to eq("MONKEY ALBERTO")
+      expect(csv_last_row[3]).to eq("HERE WE GO")
+
+      # totalduration recalculated
+      expect(csv_first_row[6]).to eq(normalizer.total_duration(csv_first_row[4], csv_first_row[5]))
+      expect(csv_last_row[6]).to eq(normalizer.total_duration(csv_last_row[4], csv_last_row[5]))
+    end
+
+    def csv_read(path)
+      CSV.read(path)
+    end
+
+    def expected_csv_data
+      {
+        headers:["timestamp", "address", "zip", "fullname", "fooduration", "barduration", "totalduration", "notes"]
+      }
+    end
+  end
 end
