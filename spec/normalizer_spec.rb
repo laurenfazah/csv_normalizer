@@ -83,12 +83,18 @@ RSpec.describe Normalizer do
 
     end
 
-    skip "converts times in FooDuration  and BarDuration to floating points seconds format" do
+    skip "converts times in FooDuration and BarDuration to floating points seconds format" do
 
     end
 
-    skip "recalculates the TotalDuration column values" do
+    it "recalculates the TotalDuration column values" do
+      foo_duration = "1:29:32.123"
+      bar_duration = "1:32:33.123"
+      total = "3:02:05.246"
 
+      rounded_total = normalizer.total_duration(foo_duration, bar_duration)
+
+      expect(rounded_total).to eq(total)
     end
 
     skip "replaces invalid UTF-8 characters with a Unicode Replacement Character" do

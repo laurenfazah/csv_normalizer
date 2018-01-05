@@ -47,9 +47,50 @@ class Normalizer
     name.upcase
   end
 
+  def total_duration(foo, bar)
+    total = [0,0,0]
+    [foo, bar].each do |time|
+      hours, minutes, seconds = time.split(":")
+      total[0] += hours.to_i
+      total[1] += minutes.to_i
+      total[2] += seconds.to_f
+    end
+    conform_duration(total)
+  end
+
   private
 
   def file_name
     csv_path.split("/").last
+  end
+
+  def conform_duration(total)
+    hours, minutes, seconds = total
+
+    if seconds >= 60
+      sec_check   = valid_sixty(seconds)
+      seconds     = sec_check[:time]
+      minutes     += sec_check[:rollover]
+    end
+
+    if minutes >= 60
+      mins_check  = valid_sixty(minutes)
+      minutes     = mins_check[:time]
+      hours       += mins_check[:rollover]
+    end
+
+    format_duration([hours, minutes, seconds.round(3)])
+  end
+
+  def format_duration(times)
+    seconds_int, seconds_flt = times[2].to_s.split(".")
+    "#{times[0]}:#{"%02d" % times[1]}:#{"%02d" % seconds_int}.#{seconds_flt}"
+  end
+
+  def valid_sixty(time)
+    {
+      rollover: (time / 60).to_i,
+      time: time %= 60
+    }
   end
 end
