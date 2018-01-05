@@ -1,5 +1,4 @@
 require 'csv'
-require 'pry'
 
 class Normalizer
   attr_reader :csv_path, :data
